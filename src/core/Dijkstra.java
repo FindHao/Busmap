@@ -1,5 +1,8 @@
 package core;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.Math;
+import java.util.Scanner;
 
 
 public class Dijkstra {
@@ -93,7 +96,26 @@ public class Dijkstra {
 			}
 		}
 	}
-	
+	class readthefile implements Runnable{
+		//store the data 
+		
+		public void run() {
+			try {
+				Scanner scan=new Scanner(new File("res/data.in"));
+					
+				
+				
+				
+				
+				
+				scan.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("The file not find.");
+			}
+			
+		}
+		
+	}
 	
 	
 	
