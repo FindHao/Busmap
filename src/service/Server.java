@@ -8,7 +8,7 @@ import java.rmi.registry.LocateRegistry;
 public class Server {
 public static void main(String[] args) {
 	try {
-		Servicelmpl service=new Servicelmpl();
+		ServiceImpl service=new ServiceImpl();
 		LocateRegistry.createRegistry(8888);
 		Naming.rebind("rmi://localhost:8888/service",service);
 		System.out.println("Service started!");

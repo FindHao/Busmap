@@ -11,3 +11,14 @@ class route ：
 文件的操作放到服务器上。同时文件的处理，对路线等的读入和初步处理在服务器上。
 采用多线程来计算，同时，主意在屏幕提示状态
 结果的保存格式？选择的点及用的路线。按顺序存储
+2014年03月26日 10时32分08秒 虽然scanner巨慢无比，我还是先选用scanner看看吧http://zhidao.baidu.com/link?url=lQFBknkSa43YWkq8gxWtQfQbdg
+DS5raKmZBnqQdgpYdI1XUkv_RrjY97Wf9fjr3taj80DKjJNjs1hkaHZ10wTK
+新建一个client来处理吧，先，至于用不用服务器再说吧，用的话，还需要下载文件。这样也行。
+进度条：http://blog.csdn.net/kakashi8841/article/details/6388797
+http://bbs.csdn.net/topics/340076988
+进度条先放一放，client加载数据用最后.thread 和runnable的区别http://blog.chinaunix.net/uid-20665441-id-310538.html
+文件的工作放到
+rmi传输文件：http://www.cnblogs.com/qytan36/archive/2010/03/28/1698885.html
+
+
+只写本地的！！！

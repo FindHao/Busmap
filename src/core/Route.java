@@ -21,4 +21,7 @@ public class Route {
 	int [] getPassNode(){
 		return passNode;
 	}
+	double getSpeed(){
+		return speed;
+	}
 }

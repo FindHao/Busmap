@@ -3,8 +3,8 @@ package service;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Servicelmpl extends UnicastRemoteObject implements RMIService{
-	protected Servicelmpl() throws RemoteException {
+public class ServiceImpl extends UnicastRemoteObject implements RMIService{
+	protected ServiceImpl() throws RemoteException {
 		super();
 	}
 
