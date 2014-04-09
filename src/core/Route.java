@@ -18,6 +18,7 @@ public class Route {
 	int getPassNodelen(){
 		return len;
 	}
+	/**Nodes passed*/
 	int [] getPassNode(){
 		return passNode;
 	}

@@ -102,7 +102,14 @@ public class Dijkstra {
 		public void run() {
 			try {
 				Scanner scan=new Scanner(new File("res/data.in"));
-					
+				int i=0,n;
+				while(scan.hasNext()){
+					route[i].index=scan.nextInt();
+					n=scan.nextInt();
+					for(int j=0;j<n;j++){
+						
+					}
+				}
 				
 				
 				
