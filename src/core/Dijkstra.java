@@ -9,47 +9,49 @@ public class Dijkstra {
 	final int maxn=100;
 	final int maxnode=200;
 	final double INFDOUBLE=0x3f3f3f3f;
-	/**1:i&&j have a path*/
+	/**true:i toj have a path*/
 	boolean gra[][];
 	int routelen,nodelen;
 	Route[] route;
 	Node[] node;
-	/**the miniest distance between two nodes*/
-	double grawork1[][];
+	/**the distance between two nodes*/
+	double distanceTwoNodes[][];
 	/**to mark the car index*/
 	int route1[][];
 	/**the miniest time between two nodes*/
 	double time1[][];
+	/**the least time by this way*/
+	int leastTimeTrack[][];
 	public Dijkstra() {
 		gra=new boolean[maxnode][maxnode];
 		routelen=0;nodelen=0;
 		route=new Route[maxn];
 		node=new Node[maxnode];//?
-	}
-	void addRoute(Route x){
-		int b;
-		route[routelen++]=x;
-		//follow is the method to complete the graphic
-		int a=x.getPassNodelen();
-		int []temppass=x.getPassNode();
-		int startx=temppass[0];
 		time1=new double[maxnode][maxnode];
-		grawork1=new double[maxnode][maxnode];
-		//initialize the gra to show that every node was isolated
+		distanceTwoNodes=new double[maxnode][maxnode];
+		leastTimeTrack=new int[maxnode][maxnode];
 		for(int i=0;i<maxnode;i++)
 			for(int j=0;j<maxnode;j++){
 				gra[i][j]=false;
 				time1[i][j]=INFDOUBLE;
-				grawork1[i][j]=0;
+				distanceTwoNodes[i][j]=INFDOUBLE;
 			}
-		
+	}
+	/** It's in the input process*/
+	void addRoute(Route x){
+		int b;
+		route[routelen++]=x;
+		//a nodes this route owning
+		int a=x.getPassNodelen();
+		int []temppass=x.getPassNode();
+		int startx=temppass[0];
 		for(int i=1;i<a;i++){
 			b=temppass[i];
 			//calc the distance between two nodes 
-			if(grawork1[startx][b]!=0)
-				grawork1[startx][b]=Math.sqrt(Math.pow((node[startx].x-node[b].x),2)+Math.pow(node[startx].y-node[b].y, 2));
-			if(time1[startx][b]>grawork1[startx][b]/x.getSpeed()){
-				time1[startx][b]=grawork1[startx][b]/x.getSpeed();
+			if(distanceTwoNodes[startx][b]!=0)
+				distanceTwoNodes[startx][b]=Math.sqrt(Math.pow((node[startx].x-node[b].x),2)+Math.pow(node[startx].y-node[b].y, 2));
+			if(time1[startx][b]>distanceTwoNodes[startx][b]/x.getSpeed()){
+				time1[startx][b]=distanceTwoNodes[startx][b]/x.getSpeed();
 			}
 			gra[startx][temppass[i]]=true;
 			startx=temppass[i];
