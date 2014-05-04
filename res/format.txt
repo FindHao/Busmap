@@ -1,7 +1,9 @@
-format
+﻿format
 the data form of data.in
 线路号 站点数 {站点号集合} 价格 周期 车速
 
 the data form of sites.in
 
-站点号 坐标
+站点号 名称 坐标
+
+You'd better read the sites.in firstly.
