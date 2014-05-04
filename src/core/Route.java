@@ -5,10 +5,11 @@ public class Route {
 	 int index;
 	 int price;
 	 int time;
-	 int len;
+	 int len=0;
+	 int i=0;
 	 int passNode[]=new int[100];
 	public void addPassNode(int x){
-		passNode[len++]=x;
+		passNode[i++]=x;
 	}
 	public int getPassNodelen(){
 		return len;

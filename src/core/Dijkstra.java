@@ -1,10 +1,8 @@
 package core;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.Math;
+import java.text.DecimalFormat;
 import java.util.Scanner;
-
-import javax.annotation.PreDestroy;
 
 
 public class Dijkstra {
@@ -26,7 +24,7 @@ public class Dijkstra {
 	int leastTimeTrack[][];
 	public Dijkstra() {
 		for(int i=0;i<maxnode;i++)node[i]=new Node();
-		routelen=0;nodelen=0;
+		routelen=1;nodelen=1;
 		for(int i=0;i<maxn;i++)route[i]=new Route();
 		time1=new double[maxnode][maxnode];
 		distanceTwoNodes=new double[maxnode][maxnode];
@@ -35,7 +33,9 @@ public class Dijkstra {
 			for(int j=0;j<maxnode;j++){
 				gra[i][j]=false;
 				time1[i][j]=INFDOUBLE;
-				distanceTwoNodes[i][j]=INFDOUBLE;
+				if(i!=j)
+					distanceTwoNodes[i][j]=INFDOUBLE;
+				else distanceTwoNodes[i][j]=0;
 			}
 //		inputget();
 		readthefile in=new readthefile();
@@ -53,45 +53,50 @@ public class Dijkstra {
 		for(int i=1;i<a;i++){
 			b=temppass[i];
 			//calc the distance between two nodes 
-			if(distanceTwoNodes[startx][b]!=0)//0 means that it didn'y be worked before
-				distanceTwoNodes[startx][b]=Math.sqrt(Math.pow((node[startx].x-node[b].x),2)+Math.pow(node[startx].y-node[b].y, 2));
+//			if(distanceTwoNodes[startx][b])//0 means that it didn'y be worked before
+			distanceTwoNodes[startx][b]=Math.sqrt(Math.pow((node[startx].x-node[b].x),2)+Math.pow(node[startx].y-node[b].y, 2));
 			if(time1[startx][b]>distanceTwoNodes[startx][b]/x.getSpeed()){
-				time1[startx][b]=distanceTwoNodes[startx][b]/x.getSpeed();
-				// if there's shorter time ,x is the better answer
-				route1[startx][b]=x.index;
-			}
-			gra[startx][temppass[i]]=true;
-			startx=temppass[i];
+			time1[startx][b]=distanceTwoNodes[startx][b]/x.getSpeed();
+			time1[b][startx]=time1[startx][b];
+			// if there's shorter time ,x is the better answer
+			route1[startx][b]=x.index;
+			route1[b][startx]=x.index;
+		}
+		gra[startx][temppass[i]]=true;
+		gra[startx][temppass[i]]=true;
+		startx=temppass[i];
 		}
 	}
 	boolean deng(double a,double b){
 		if(Math.abs(a-b)<=Math.pow(1, -5))return true;
 		else return false;
-		
 	}
 	void addNode(Node x){
 		node[nodelen++]=x;
 	}
 	/**This method is to calc the most saving time route that we needn't wait*/
 	public int[] work1(int v,int destnation){
-		/**this is the shortest time answer*/
+		//this is the shortest time answer
 		double []timedist=new double[nodelen];
 		boolean[] used=new boolean[nodelen];
 		int [] passRoute=new int[nodelen];
 		int[] pre=new int[nodelen];
 		/**copy the information*/
-		for(int i=0;i<nodelen;i++){
+		for(int i=1;i<nodelen;i++){
 			timedist[i]=time1[v][i];
 			used[i]=false;
-			pre[i]=(gra[v][i])?v:i;//mark the pre point
+//			pre[i]=(timedist[i]!=INFDOUBLE)?v:0;//mark the pre point
+			pre[i]=0;
+			
 		}
+		pre[v]=v;
 		timedist[v]=0;used[v]=true;
-		for(int i=0;i<nodelen;i++){
+		for(int i=1;i<nodelen;i++){
 			if(i==v)continue;
 			double tmp=INFDOUBLE;
 			int u=v;
 			/**find the nearest point u*/
-			for(int j=0;j<nodelen;j++){
+			for(int j=1;j<nodelen;j++){
 				if(!used[j] && timedist[j]<tmp){
 					u=j;
 					tmp=timedist[j];
@@ -100,8 +105,9 @@ public class Dijkstra {
 			used[u]=true;
 			pre[u]=v;
 			
-			for(int j=0;j<nodelen;j++){
-				if(!used[j] && gra[u][j]){
+			for(int j=1;j<nodelen;j++){
+//				if(!used[j] && gra[u][j]){
+				if(!used[j]&& timedist[j]!=INFDOUBLE){
 					double tmp2=timedist[u]+time1[u][j];
 					if(tmp2<timedist[j]){
 						timedist[j]=tmp2;pre[j]=u;
@@ -109,13 +115,15 @@ public class Dijkstra {
 				}
 			}
 		}
+//		for(int i=1;i<nodelen;i++)System.out.println("pre"+pre[i]+"time"+timedist[i]);
 		/**follow is to recover the way*/
 		int []theWayPoint=new int[nodelen];
 		int i=1;
 		while(pre[destnation]!=destnation){
-			theWayPoint[i++]=pre[destnation];
+			theWayPoint[i]=pre[destnation];
 			destnation=pre[destnation];
 			passRoute[i]=route1[destnation][pre[destnation]];
+			i++;
 		}
 		theWayPoint[0]=i;//the number of the point
 		return theWayPoint;
@@ -126,7 +134,7 @@ public class Dijkstra {
 	class readthefile implements Runnable{
 		public void run() {
 			try {
-				int i=0,n,tmppassnode;
+				int n,tmppassnode;
 				Scanner scan=new Scanner(new File("res/sites.txt"));
 				while(scan.hasNext()){
 					Node a=new Node();//here !!!!Attention:must be new every time
@@ -137,7 +145,6 @@ public class Dijkstra {
 					addNode(a);
 				}
 				scan.close();
-				i=0;
 				Scanner scan2=new Scanner(new File("res/data.in"));
 				Route b=new Route();
 				while(scan2.hasNext()){
@@ -147,14 +154,23 @@ public class Dijkstra {
 					for(int j=0;j<n;j++){
 						tmppassnode=scan2.nextInt();
 						b.addPassNode(tmppassnode);
-						node[tmppassnode].addPassRoute(route[i].index);
+						node[tmppassnode].addPassRoute(b.index);
 					}
 					b.price=scan2.nextInt();
 					b.time=scan2.nextInt();
 					b.speed=scan2.nextDouble();
+//					System.out.println(b.speed);
 					addRoute(b);
 				}
 				scan2.close();
+//				System.out.println("toute"+route1[6][29]);
+				for(int i=0;i<nodelen;i++){
+					for(int j=0;j<nodelen;j++){
+						if(i==j)time1[i][j]=0;
+//						System.out.print(new DecimalFormat("#.00").format(time1[i][j])+" ");
+					}
+//					System.out.println();
+				}
 			} catch (FileNotFoundException e) {
 				System.out.println("The file not find.");
 			}
@@ -171,7 +187,6 @@ public class Dijkstra {
 //		}
 //	}
 //	public static void main(String[] args) {
-//		new Dijkstra();
 //	}
 	
 }
