@@ -95,7 +95,7 @@ public class Home extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				int []ans1=dks.work1(startSite.getSelectedIndex(), endSite.getSelectedIndex());
-				for(int i=0;i<ans1.length;i++){
+				for(int i=0;i<ans1[0];i++){
 					System.out.println(ans1[i]);
 				}
 			}

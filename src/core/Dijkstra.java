@@ -50,22 +50,27 @@ public class Dijkstra {
 		int a=x.getPassNodelen();
 		int []temppass=x.getPassNode();
 		int startx=temppass[0];
+		System.out.print(x.index+"  pass :  ");
 		for(int i=1;i<a;i++){
 			b=temppass[i];
+			System.out.print(" "+b);
 			//calc the distance between two nodes 
 //			if(distanceTwoNodes[startx][b])//0 means that it didn'y be worked before
 			distanceTwoNodes[startx][b]=Math.sqrt(Math.pow((node[startx].x-node[b].x),2)+Math.pow(node[startx].y-node[b].y, 2));
 			if(time1[startx][b]>distanceTwoNodes[startx][b]/x.getSpeed()){
-			time1[startx][b]=distanceTwoNodes[startx][b]/x.getSpeed();
+//				if(startx==9&&b==10)System.out.println("time1"+time1[startx][b]);
+//				System.out.println("time  "+startx+" "+b+" "+time1[startx][b]);
+				time1[startx][b]=distanceTwoNodes[startx][b]/x.getSpeed();
 			time1[b][startx]=time1[startx][b];
 			// if there's shorter time ,x is the better answer
 			route1[startx][b]=x.index;
 			route1[b][startx]=x.index;
 		}
 		gra[startx][temppass[i]]=true;
-		gra[startx][temppass[i]]=true;
+		gra[temppass[i]][startx]=true;
 		startx=temppass[i];
 		}
+	System.out.println();
 	}
 	boolean deng(double a,double b){
 		if(Math.abs(a-b)<=Math.pow(1, -5))return true;
@@ -79,35 +84,34 @@ public class Dijkstra {
 		//this is the shortest time answer
 		double []timedist=new double[nodelen];
 		boolean[] used=new boolean[nodelen];
+		//the no of the bus you need to take on this site
 		int [] passRoute=new int[nodelen];
 		int[] pre=new int[nodelen];
 		/**copy the information*/
 		for(int i=1;i<nodelen;i++){
 			timedist[i]=time1[v][i];
 			used[i]=false;
-//			pre[i]=(timedist[i]!=INFDOUBLE)?v:0;//mark the pre point
 			pre[i]=0;
-			
+			System.out.println("time :"+timedist[i]);
 		}
 		pre[v]=v;
 		timedist[v]=0;used[v]=true;
+		for(int i=1;i<=nodelen;i++)if(gra[v][i])pre[i]=v;
 		for(int i=1;i<nodelen;i++){
 			if(i==v)continue;
 			double tmp=INFDOUBLE;
 			int u=v;
 			/**find the nearest point u*/
 			for(int j=1;j<nodelen;j++){
+				
 				if(!used[j] && timedist[j]<tmp){
 					u=j;
 					tmp=timedist[j];
 				}
 			}
 			used[u]=true;
-			pre[u]=v;
-			
 			for(int j=1;j<nodelen;j++){
-//				if(!used[j] && gra[u][j]){
-				if(!used[j]&& timedist[j]!=INFDOUBLE){
+				if(!used[j]&& time1[u][j]<1000000){
 					double tmp2=timedist[u]+time1[u][j];
 					if(tmp2<timedist[j]){
 						timedist[j]=tmp2;pre[j]=u;
@@ -146,8 +150,8 @@ public class Dijkstra {
 				}
 				scan.close();
 				Scanner scan2=new Scanner(new File("res/data.in"));
-				Route b=new Route();
 				while(scan2.hasNext()){
+					Route b=new Route();
 					b.index=scan2.nextInt();
 					b.len=scan2.nextInt();
 					n=b.len;
@@ -163,11 +167,10 @@ public class Dijkstra {
 					addRoute(b);
 				}
 				scan2.close();
-//				System.out.println("toute"+route1[6][29]);
 				for(int i=0;i<nodelen;i++){
 					for(int j=0;j<nodelen;j++){
 						if(i==j)time1[i][j]=0;
-//						System.out.print(new DecimalFormat("#.00").format(time1[i][j])+" ");
+//						System.out.print(new DecimalFormat("000.00").format(time1[i][j])+" ");
 					}
 //					System.out.println();
 				}
