@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
+import javax.annotation.PreDestroy;
+
 
 public class Dijkstra {
 	final int maxn=100;
@@ -22,6 +24,8 @@ public class Dijkstra {
 	double time1[][];
 	/**the least time by this way*/
 	int leastTimeTrack[][];
+	/**the shortest time to return home*/
+	double ansTime;
 	public Dijkstra() {
 		for(int i=0;i<maxnode;i++)node[i]=new Node();
 		routelen=1;nodelen=1;
@@ -50,10 +54,8 @@ public class Dijkstra {
 		int a=x.getPassNodelen();
 		int []temppass=x.getPassNode();
 		int startx=temppass[0];
-		System.out.print(x.index+"  pass :  ");
 		for(int i=1;i<a;i++){
 			b=temppass[i];
-			System.out.print(" "+b);
 			//calc the distance between two nodes 
 //			if(distanceTwoNodes[startx][b])//0 means that it didn'y be worked before
 			distanceTwoNodes[startx][b]=Math.sqrt(Math.pow((node[startx].x-node[b].x),2)+Math.pow(node[startx].y-node[b].y, 2));
@@ -63,14 +65,13 @@ public class Dijkstra {
 				time1[startx][b]=distanceTwoNodes[startx][b]/x.getSpeed();
 			time1[b][startx]=time1[startx][b];
 			// if there's shorter time ,x is the better answer
+		}
 			route1[startx][b]=x.index;
 			route1[b][startx]=x.index;
-		}
 		gra[startx][temppass[i]]=true;
 		gra[temppass[i]][startx]=true;
 		startx=temppass[i];
 		}
-	System.out.println();
 	}
 	boolean deng(double a,double b){
 		if(Math.abs(a-b)<=Math.pow(1, -5))return true;
@@ -79,20 +80,23 @@ public class Dijkstra {
 	void addNode(Node x){
 		node[nodelen++]=x;
 	}
+	public Node[] getNode(){
+		return node;
+	}
 	/**This method is to calc the most saving time route that we needn't wait*/
 	public int[] work1(int v,int destnation){
 		//this is the shortest time answer
 		double []timedist=new double[nodelen];
 		boolean[] used=new boolean[nodelen];
 		//the no of the bus you need to take on this site
-		int [] passRoute=new int[nodelen];
+		
 		int[] pre=new int[nodelen];
 		/**copy the information*/
 		for(int i=1;i<nodelen;i++){
 			timedist[i]=time1[v][i];
 			used[i]=false;
 			pre[i]=0;
-			System.out.println("time :"+timedist[i]);
+//			System.out.println("time :"+timedist[i]);
 		}
 		pre[v]=v;
 		timedist[v]=0;used[v]=true;
@@ -115,24 +119,42 @@ public class Dijkstra {
 					double tmp2=timedist[u]+time1[u][j];
 					if(tmp2<timedist[j]){
 						timedist[j]=tmp2;pre[j]=u;
+						
 					}
 				}
 			}
 		}
 //		for(int i=1;i<nodelen;i++)System.out.println("pre"+pre[i]+"time"+timedist[i]);
 		/**follow is to recover the way*/
-		int []theWayPoint=new int[nodelen];
+		int []theSite=new int[nodelen];
+		int [] passRoute=new int[nodelen];
 		int i=1;
+		theSite[i]=destnation;
+		ansTime=timedist[destnation];
+		passRoute[i++]=route1[destnation][pre[destnation]];
+		int ans[]=new int[nodelen*3];
 		while(pre[destnation]!=destnation){
-			theWayPoint[i]=pre[destnation];
+			theSite[i]=pre[destnation];
 			destnation=pre[destnation];
 			passRoute[i]=route1[destnation][pre[destnation]];
 			i++;
 		}
-		theWayPoint[0]=i;//the number of the point
-		return theWayPoint;
+		i--;
+		for(int j=1;j<=i;j++){
+		}
+		theSite[0]=i;//the number of the point
+		//ans[0]is the num of sites
+		ans[0]=theSite[0];
+		//ans[1..i]is the sites
+		//ans[i+1..i*2-1]the No.bus
+		//ans[i*2] the shortest time
+		for(int j=1;j<=i;j++)ans[j]=theSite[i-j+1];
+		for(int j=i+1;j<i+1+i;j++)ans[j]=passRoute[i+i-j];
+		return ans;
 	}
-	
+	public double getAnsTime(){
+		return ansTime;
+	}
 	
 	/**This is the thread to read the inputdata*/
 	class readthefile implements Runnable{

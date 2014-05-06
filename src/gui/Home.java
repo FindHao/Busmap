@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -16,6 +17,13 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 import core.Dijkstra;
+import core.Node;
+
+import javax.swing.JTextField;
+import javax.swing.BoxLayout;
+import javax.swing.JTextArea;
+import java.awt.FlowLayout;
+import java.awt.Font;
 
 /*The home of the project*/
 public class Home extends JFrame{
@@ -31,7 +39,10 @@ public class Home extends JFrame{
 	JLabel lblTo = new JLabel("to");
 	JPanel BottomPanel = new JPanel();
 	JButton btnFind = new JButton("Find");
-	Dijkstra dks=new Dijkstra();;
+	JTextArea ansText;
+	Dijkstra dks=new Dijkstra();
+	Node []node=dks.getNode();
+	private final JLabel lblYourAnswer = new JLabel("Your answer:");
 	public Home() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -51,6 +62,14 @@ public class Home extends JFrame{
 		JPanel ansPanel = new JPanel();
 		ansPanel.setBounds(1016, 0, 158, 518);
 		getContentPane().add(ansPanel);
+		ansPanel.setLayout(new BoxLayout(ansPanel, BoxLayout.Y_AXIS));
+		lblYourAnswer.setFont(new Font("Consolas", Font.PLAIN, 14));
+		ansPanel.add(lblYourAnswer);
+		
+		ansText = new JTextArea();
+		ansText.setEditable(false);
+		ansText.setLineWrap(true);
+		ansPanel.add(ansText);
 		bottomPaneladd();
 		getContentPane().add(BottomPanel);
 		
@@ -94,15 +113,39 @@ public class Home extends JFrame{
 			/**To find the way*/
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+//				show(dks.work1(startSite.getSelectedIndex(), endSite.getSelectedIndex()));
+				//shortest time
 				int []ans1=dks.work1(startSite.getSelectedIndex(), endSite.getSelectedIndex());
-				for(int i=0;i<ans1[0];i++){
+				show(ans1);
+				for(int i=0;i<=ans1[0]*2-1;i++){
 					System.out.println(ans1[i]);
 				}
 			}
 		});
 		BottomPanel.add(btnFind);
 	}
-	
+	public void show(int ans[]){
+		int i=ans[0];
+		int k=1;
+		int j=i+1;
+		ansText.setText("");
+		while(j<i*2){
+			ansText.append(("No."+ans[j]+" :"+node[ans[k++]].getName()+"->"));
+			j++;
+			while(ans[j]==ans[j-1]&&j<i*2){ansText.append(node[ans[k]].getName()+"->");j++;k++;}
+			if(j<i*2||k<=i)ansText.append(""+node[ans[k]].getName());
+			ansText.append("\n");
+			
+//			ansText.append(("No."+ans[j]+" :"+ans[k++]+"->"));
+//			j++;
+//			while(ans[j]==ans[j-1]&&j<i*2){ansText.append(ans[k]+"->");j++;k++;}
+//			if(j<i*2||k<=i)ansText.append(""+ans[k]);
+//			ansText.append("\n");
+		}
+		ansText.append("Full time "+new DecimalFormat("#.00").format(dks.getAnsTime())+"\n");
+		
+		
+	}
 	public static void main(String[] args) {
 		new Home();
 	}

@@ -77,3 +77,4 @@ Route:
 	while(scan2.hasNext()){
 					Route b=new Route();
 					这里的b一定要在里面new啊@@@@@
+version 1.1 已经完善了第一个功能。而且测试通过。准备添加第二个算法。
