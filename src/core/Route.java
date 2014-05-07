@@ -21,5 +21,7 @@ public class Route {
 	public double getSpeed(){
 		return speed;
 	}
-
+	public int getPrice(){
+		return price;
+	}
 }

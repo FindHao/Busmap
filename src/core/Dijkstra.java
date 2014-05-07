@@ -1,10 +1,9 @@
 package core;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
-
-import javax.annotation.PreDestroy;
 
 
 public class Dijkstra {
@@ -140,8 +139,6 @@ public class Dijkstra {
 			i++;
 		}
 		i--;
-		for(int j=1;j<=i;j++){
-		}
 		theSite[0]=i;//the number of the point
 		//ans[0]is the num of sites
 		ans[0]=theSite[0];
@@ -151,6 +148,55 @@ public class Dijkstra {
 		for(int j=1;j<=i;j++)ans[j]=theSite[i-j+1];
 		for(int j=i+1;j<i+1+i;j++)ans[j]=passRoute[i+i-j];
 		return ans;
+	}
+	/**To check the route no they have in common;if do,commons transmit;else if id has,id's one =common +price*/
+	int []deal(int []a,int id){
+		//a means the node before ,id means the index of this node .
+		int[] nodepassroute=node[id].getPassRoute();
+		int passLen=node[id].getLen();
+		int tmpans[]=new int[nodelen];
+		boolean findit;
+		int minv=(int)INFDOUBLE;
+		for(int i=0;i<a[0];i++)minv=Math.min(minv, a[i]);
+		for(int j=1;j<=passLen;j++){
+			findit=false;
+			for(int i=1;i<=nodelen;i++){
+				if(nodepassroute[j]==i){
+					findit=true;
+					tmpans[i]=a[i];
+				}
+			}
+			if(!findit){
+				tmpans[j]=minv+route[nodepassroute[j]].getPrice();
+			}
+		}
+		return tmpans;
+	}
+	public void work2(int v,int destnation){
+		boolean used[]=new boolean [nodelen];
+		//every site pass this route's cost
+		int price[][]=new int[nodelen][routelen];
+		
+		int pre[]=new int[nodelen];
+		for(int i=1;i<nodelen;i++){
+			used[i]=false;
+			pre[i]=0;
+		}
+		used[v]=true;
+		pre[v]=v;
+		for(int i=1;i<=nodelen;i++)if(gra[v][i])pre[i]=v;
+		Queue<Integer>que=new LinkedList<Integer>();
+		que.offer(v);
+		while(!que.isEmpty()){
+			int u=que.poll();
+			for(int i=0;i<=nodelen;i++)
+				if(gra[u][i]&&!used[i]){
+					que.offer(i);
+					used[i]=true;
+					price[i]=deal(price[u],i);
+				}
+		}
+		
 	}
 	public double getAnsTime(){
 		return ansTime;

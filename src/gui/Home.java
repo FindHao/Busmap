@@ -1,34 +1,32 @@
 package gui;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
 
 import core.Dijkstra;
+import core.MapPanel;
 import core.Node;
-
-import javax.swing.JTextField;
-import javax.swing.BoxLayout;
-import javax.swing.JTextArea;
-import java.awt.FlowLayout;
-import java.awt.Font;
 
 /*The home of the project*/
 public class Home extends JFrame{
 	private static final long serialVersionUID = -4731380524981415485L;
-	JPanel mapPanel = new JPanel();
+	MapPanel mapPanel = new MapPanel();
 	ImageIcon map=new ImageIcon("res/Map.jpg");
 	JLabel mapLabel = new JLabel(map);
 	
@@ -53,9 +51,9 @@ public class Home extends JFrame{
 		}  
 		setSize(1200,600);
 		getContentPane().setLayout(null);
-		mapLabel.setBounds(0, 0, 1011, 518);
+//		mapLabel.setBounds(0, 0, 1011, 518);
 		mapPanel.setBounds(0, 0, 1011, 518);
-		mapPanel.add(mapLabel);
+//		mapPanel.add(mapLabel);
 		
 		getContentPane().add(mapPanel);
 		
@@ -117,9 +115,9 @@ public class Home extends JFrame{
 				//shortest time
 				int []ans1=dks.work1(startSite.getSelectedIndex(), endSite.getSelectedIndex());
 				show(ans1);
-				for(int i=0;i<=ans1[0]*2-1;i++){
-					System.out.println(ans1[i]);
-				}
+//				for(int i=0;i<=ans1[0]*2-1;i++){
+//					System.out.println(ans1[i]);
+//				}
 			}
 		});
 		BottomPanel.add(btnFind);
@@ -143,8 +141,12 @@ public class Home extends JFrame{
 //			ansText.append("\n");
 		}
 		ansText.append("Full time "+new DecimalFormat("#.00").format(dks.getAnsTime())+"\n");
-		
-		
+		int x1[]=new int[ans[0]+2];int y1[]=new int[ans[0]+2];int x2[]=new int[ans[0]+2];int y2[]=new int[ans[0]+2];
+		for(int ii=1;ii<=ans[0];ii++){
+			x1[ii]=node[ans[ii-1]].getX();y1[ii]=node[ans[ii-1]].getY();x2[ii]=node[ans[ii]].getX();y2[ii]=node[ans[ii]].getY();
+		};
+		mapPanel.update(mapPanel.getGraphics());
+		mapPanel.drawline(mapPanel.getGraphics(), x1, y1, x2, y2, ans[0]);
 	}
 	public static void main(String[] args) {
 		new Home();
