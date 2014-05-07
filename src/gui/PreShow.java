@@ -20,6 +20,7 @@ public class PreShow extends JDialog{
 	    private JLabel progressInfo;  
 	public PreShow() {
 		 super(new JFrame(), true);  
+		 setLocation(300, 100);
 	        //鼠标形状为等待，告知用户程序已经在很努力的加载了，此时不可操作  
 	        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));  
 	        //背景图片  
@@ -37,7 +38,7 @@ public class PreShow extends JDialog{
 	        getLayeredPane().add(label, new Integer(Integer.MIN_VALUE));  
 	        setSize(background.getIconWidth(), background.getIconHeight());  
 	        //移至屏幕中央，覆盖闪屏区域  
-	        moveToScreenCenter(this);
+//	        moveToScreenCenter(this);
 	}
 	private void initUI() {  
         progressBar = new JProgressBar();  

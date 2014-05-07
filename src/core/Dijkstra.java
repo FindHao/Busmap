@@ -157,10 +157,10 @@ public class Dijkstra {
 		int tmpans[]=new int[nodelen];
 		boolean findit;
 		int minv=(int)INFDOUBLE;
-		for(int i=0;i<a[0];i++)minv=Math.min(minv, a[i]);
-		for(int j=1;j<=passLen;j++){
+		for(int i=0;i<a[0];i++)if(a[i]!=0)minv=Math.min(minv, a[i]);
+		for(int j=0;j<passLen;j++){
 			findit=false;
-			for(int i=1;i<=nodelen;i++){
+			for(int i=1;i<nodelen&&!findit;i++){
 				if(nodepassroute[j]==i){
 					findit=true;
 					tmpans[i]=a[i];
@@ -170,6 +170,7 @@ public class Dijkstra {
 				tmpans[j]=minv+route[nodepassroute[j]].getPrice();
 			}
 		}
+		//tmpans:current node's price via this way
 		return tmpans;
 	}
 	public void work2(int v,int destnation){
@@ -187,15 +188,21 @@ public class Dijkstra {
 		for(int i=1;i<=nodelen;i++)if(gra[v][i])pre[i]=v;
 		Queue<Integer>que=new LinkedList<Integer>();
 		que.offer(v);
+		price[v][0]=node[v].getLen();
+		for(int i=1;i<=price[v][0];i++)price[v][i]=route[node[v].getPassRoute()[i-1]].price;
 		while(!que.isEmpty()){
 			int u=que.poll();
-			for(int i=0;i<=nodelen;i++)
+			for(int i=1;i<nodelen;i++)
 				if(gra[u][i]&&!used[i]){
+					//the neighborhoods
 					que.offer(i);
 					used[i]=true;
 					price[i]=deal(price[u],i);
 				}
 		}
+		int minv=1000;
+		for(int j=1;j<routelen;j++)
+		System.out.println("price"+price[destnation][j]+"    ");
 		
 	}
 	public double getAnsTime(){

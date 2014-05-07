@@ -8,7 +8,6 @@ import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -27,8 +26,6 @@ import core.Node;
 public class Home extends JFrame{
 	private static final long serialVersionUID = -4731380524981415485L;
 	MapPanel mapPanel = new MapPanel();
-	ImageIcon map=new ImageIcon("res/Map.jpg");
-	JLabel mapLabel = new JLabel(map);
 	
 	final int maxnode=200;
 	JComboBox<Object>startSite;
@@ -37,6 +34,7 @@ public class Home extends JFrame{
 	JLabel lblTo = new JLabel("to");
 	JPanel BottomPanel = new JPanel();
 	JButton btnFind = new JButton("Find");
+	JButton Find2 = new JButton("Find2");
 	JTextArea ansText;
 	Dijkstra dks=new Dijkstra();
 	Node []node=dks.getNode();
@@ -46,14 +44,13 @@ public class Home extends JFrame{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+		setLocation(50, 50);
+		setResizable(false);
 		setSize(1200,600);
 		getContentPane().setLayout(null);
-//		mapLabel.setBounds(0, 0, 1011, 518);
 		mapPanel.setBounds(0, 0, 1011, 518);
-//		mapPanel.add(mapLabel);
 		
 		getContentPane().add(mapPanel);
 		
@@ -70,6 +67,9 @@ public class Home extends JFrame{
 		ansPanel.add(ansText);
 		bottomPaneladd();
 		getContentPane().add(BottomPanel);
+		
+
+		
 		
 		
 		/**windows Destroy*/
@@ -98,7 +98,7 @@ public class Home extends JFrame{
 		startSite.setBounds(67, 6, 122, 21);
 		endSite=new JComboBox<Object>(endname);
 		endSite.setBounds(211, 6, 146, 21);
-		BottomPanel.setBounds(70, 523, 434, 38);
+		BottomPanel.setBounds(70, 523, 574, 38);
 		BottomPanel.setLayout(null);
 		lblFrom.setBounds(10, 9, 47, 15);
 		BottomPanel.add(lblFrom);
@@ -121,6 +121,14 @@ public class Home extends JFrame{
 			}
 		});
 		BottomPanel.add(btnFind);
+		Find2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dks.work2(startSite.getSelectedIndex(), endSite.getSelectedIndex());
+				
+			}
+		});
+		Find2.setBounds(434, 5, 71, 23);
+		BottomPanel.add(Find2);
 	}
 	public void show(int ans[]){
 		int i=ans[0];

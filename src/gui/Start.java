@@ -1,18 +1,16 @@
+package gui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-import gui.PreShow;
-
-import javax.swing.JFrame;  
-import javax.swing.UIManager;  
+import javax.swing.UIManager;
   
 /** 
  * 
  * @author 杨胜寒 
  */  
-public class test {  
+public class Start {  
   
     public static void main(String args[]) {  
         try {  
@@ -33,12 +31,13 @@ public class test {
                 } catch (InterruptedException ex) {  
                     //异常不做处理  
                 }  
-                JFrame window = new JFrame();  
+//                JFrame window = new JFrame();  
                 splashWindow.updateProcess("正在启动主窗体. . .", 100);  
-                moveToScreenCenter(window);  
+//                moveToScreenCenter(window);  
                 splashWindow.setVisible(false);  
                 //数据加载完成，显示主窗体  
-                window.setVisible(true);  
+//                window.setVisible(true);  
+                new Home();
                 //释放资源  
                 splashWindow.dispose();  
             }  
